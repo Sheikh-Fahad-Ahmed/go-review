@@ -13,7 +13,6 @@ The key insight: no goroutine needed because the buffer absorbs all sends before
 */
 
 func main() {
-	logCh := make(chan string, 5)
 
 	messages := []string{"INFO: server started",
 		"INFO: request received",
@@ -21,6 +20,7 @@ func main() {
 		"ERROR: db timeout",
 		"INFO: request done",
 	}
+	logCh := make(chan string, len(messages))
 
 	for _, msg := range messages {
 		logMessage(logCh, msg)
@@ -30,12 +30,9 @@ func main() {
 
 	for msg := range logCh {
 		fmt.Println(msg)
-
 	}
-
 }
 
 func logMessage(ch chan<- string, msg string) {
 	ch <- msg
-
 }
